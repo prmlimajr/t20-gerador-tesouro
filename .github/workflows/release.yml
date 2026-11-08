@@ -18,9 +18,12 @@ jobs:
         run: |
           TAG="${GITHUB_REF_NAME}"
           VERSION="${TAG#v}"
+          REPO="https://github.com/${GITHUB_REPOSITORY}"
           jq --arg v "$VERSION" \
-             --arg d "https://github.com/${GITHUB_REPOSITORY}/releases/download/${TAG}/module.zip" \
-             '.version = $v | .download = $d' module.json > module.tmp.json
+             --arg u "$REPO" \
+             --arg m "$REPO/releases/latest/download/module.json" \
+             --arg d "$REPO/releases/download/${TAG}/module.zip" \
+             '.version = $v | .url = $u | .manifest = $m | .download = $d' module.json > module.tmp.json
           mv module.tmp.json module.json
 
       - name: Empacotar

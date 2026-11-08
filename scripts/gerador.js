@@ -2,7 +2,7 @@
  * Motor de geração de tesouro — segue a planilha "T20 - Tabela de geração de tesouros".
  * Os dados vêm de data/tabelas.json (gerado por tools/converter.py).
  */
-export const MODULE_ID = "t20-planilha-tesouro";
+export const MODULE_ID = "t20-gerador-tesouro";
 
 let T = null;
 

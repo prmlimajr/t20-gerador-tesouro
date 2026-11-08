@@ -1,5 +1,5 @@
 {
-  "id": "t20-planilha-tesouro",
+  "id": "t20-gerador-tesouro",
   "title": "T20 — Gerador de Tesouros",
   "description": "Gera tesouros aleatórios seguindo a planilha de geração de tesouros de Tormenta20 (Tesouro por ND, riquezas, itens diversos, equipamentos, poções, superiores e mágicos). Abre um baú animado ao fim do combate, permite personalizar, converter moedas e distribuir entre os jogadores.",
   "version": "1.0.0",
@@ -8,9 +8,9 @@
       "name": "Paulo Lima"
     }
   ],
-  "url": "https://github.com/prmlimajr/t20-planilha-tesouro",
-  "manifest": "https://github.com/prmlimajr/t20-planilha-tesouro/releases/latest/download/module.json",
-  "download": "https://github.com/prmlimajr/t20-planilha-tesouro/releases/download/1.0.0/module.zip",
+  "url": "https://github.com/prmlimajr/t20-gerador-tesouro",
+  "manifest": "https://github.com/prmlimajr/t20-gerador-tesouro/releases/latest/download/module.json",
+  "download": "https://github.com/prmlimajr/t20-gerador-tesouro/releases/download/1.0.1/module.zip",
   "compatibility": {
     "minimum": "12",
     "verified": "13"
