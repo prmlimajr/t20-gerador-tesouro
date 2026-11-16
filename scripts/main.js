@@ -71,7 +71,7 @@ Hooks.on("deleteCombat", (combat, options, userId) => {
   if (!game.user.isGM || userId !== game.user.id) return;
   if (!game.settings.get(MODULE_ID, "perguntarAoEncerrar")) return;
   if (!combat.started && !combat.round) return; // combate que nunca começou
-  A.abrirPrompt({ ndSugerido: A.sugerirND(combat) });
+  A.abrirPrompt({ ndSugerido: A.sugerirND(combat), combat });
 });
 
 /* Botão nos controles de token (mestre) */

@@ -57,8 +57,22 @@ export async function gerarEMostrar({ nd, tipo }) {
   return estado;
 }
 
-/** Sugere o ND pelo maior ND entre os inimigos (disposição hostil) do combate. */
+const ND_ENCONTRO_ID = "t20-calcular-nd-encontro";
+
+/** API do módulo "T20 — ND do Encontro", se estiver ativo. */
+function apiNDEncontro() {
+  const mod = game.modules.get(ND_ENCONTRO_ID);
+  return mod?.active ? mod.api : null;
+}
+
+/**
+ * Sugere o ND do tesouro para um combate.
+ * Com o módulo "T20 — ND do Encontro" ativo, usa o ND do encontro (várias ameaças);
+ * senão, o maior ND entre os inimigos (disposição hostil).
+ */
 export function sugerirND(combat) {
+  const api = apiNDEncontro();
+  if (api) return api.ndTesouro(combat);
   const hostil = CONST.TOKEN_DISPOSITIONS.HOSTILE;
   const nds = (combat?.combatants ?? [])
     .filter((c) => c.token?.disposition === hostil && !c.actor?.hasPlayerOwner)
@@ -75,9 +89,20 @@ const DESCRICAO_TIPO = {
 };
 
 /** Pergunta o ND e o tipo de tesouro e gera. */
-export async function abrirPrompt({ ndSugerido = null } = {}) {
+export async function abrirPrompt({ ndSugerido = null, combat = null } = {}) {
   if (!game.user.isGM) return;
   const T = await carregarTabelas();
+  combat ??= game.combat;
+  if (!ndSugerido && combat) ndSugerido = sugerirND(combat);
+
+  // Com o "T20 — ND do Encontro" ativo, mostra o ND calculado e seus grupos.
+  const api = apiNDEncontro();
+  const quadroEncontro = api && combat ? (api.htmlResumo?.(combat) ?? "") : "";
+  let dica = "";
+  if (quadroEncontro) dica = `<p class="hint">O ND do tesouro foi preenchido com o ND do encontro (máx. 20).</p>`;
+  else if (ndSugerido && api) dica = `<p class="hint">Sugestão: ND do encontro (ND ${ndSugerido}).</p>`;
+  else if (ndSugerido)
+    dica = `<p class="hint">Sugestão: maior ND entre os inimigos do combate (ND ${ndSugerido}). Ative o módulo "T20 — ND do Encontro" para calcular o ND com vários inimigos.</p>`;
   const padraoND = ndSugerido ?? game.settings.get(MODULE_ID, "ultimoND") ?? "1";
 
   const opcoesND = T.ordemND.map((nd) => `<option value="${nd}" ${nd === padraoND ? "selected" : ""}>ND ${nd}</option>`).join("");
@@ -96,11 +121,12 @@ export async function abrirPrompt({ ndSugerido = null } = {}) {
 
   const content = `
     <div class="t20t-prompt">
+      ${quadroEncontro}
       <div class="form-group">
         <label>Nível de desafio do encontro</label>
         <select name="nd">${opcoesND}</select>
       </div>
-      ${ndSugerido ? `<p class="hint">Sugestão: maior ND entre os inimigos do combate (ND ${ndSugerido}). Para vários inimigos, use o ND do combate.</p>` : ""}
+      ${dica}
       <p class="t20t-rotulo">Tesouro</p>
       <div class="t20t-tipos">${tipos}</div>
     </div>`;

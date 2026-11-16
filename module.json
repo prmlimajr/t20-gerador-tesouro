@@ -21,6 +21,13 @@
         "id": "tormenta20",
         "type": "system"
       }
+    ],
+    "recommends": [
+      {
+        "id": "t20-calcular-nd-encontro",
+        "type": "module",
+        "reason": "Sugere o ND do encontro (várias ameaças) ao gerar o tesouro."
+      }
     ]
   },
   "esmodules": [
